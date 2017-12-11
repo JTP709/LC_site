@@ -4,6 +4,24 @@
     <div class="jumbotron">
       <h1>Blog Admin Add</h1>
       <p class="lead">Add a new blog page</p>
+      <form action="#" method="post">
+          <h3>Title:</h3>
+          <input type="text" name="title">
+          <br>
+          <h3>Category:</h3>
+          <input type ='radio'  name='category' value ='general'> General
+          <br>
+          <input type ='radio'  name='category' value ='crafting'> Crafting
+          <br>
+          <input type ='radio'  name='category' value ='baking'> Baking/Cooking
+          <br>
+          <input type ='radio'  name='category' value ='travel'> Travel
+          <br>
+          <h3>Content:</h3>
+          <textarea name="content"></textarea>
+          <br>
+          <input class="submit" type='submit' value='Submit'>
+      </form>
     </div>
   </main>
 {% endblock %}

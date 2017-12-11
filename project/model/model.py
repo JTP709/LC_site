@@ -1,7 +1,7 @@
 # Configuration
 import os
 import sys
-from sqlalchemy import Column, ForeignKey, Integer, String
+from sqlalchemy import Column, ForeignKey, Integer, String, Boolean
 from sqlalchemy import DateTime, Boolean, Enum, Float, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
@@ -19,7 +19,8 @@ def dump_datetime(value):
 
 class Blog(Base):
     __tablename__ = 'blog'
-    id = Column(Integer, primary_key=True)
+    pid = Column(Integer, primary_key=True)
+    bid = Column(Integer)
     title = Column(String(80), nullable=False)
     author = Column(String(80), nullable=False)
     date_time = Column(DateTime)
@@ -30,6 +31,7 @@ class Blog(Base):
                             'baking',
                             name = 'blog_cat'))
     content = Column(String)
+    hidden = Column(Boolean)
 
 con = connect()
 Base.metadata.create_all(con)
