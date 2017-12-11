@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block content %}
+  <main role="main" class="container">
+    <div class="jumbotron">
+      <h1>Blog</h1>
+      <p class="lead">Leandra's Blog Page</p>
+      <table id = "incidents" class="table table-striped">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Author</th>
+              <th>Date</th>
+              <th>Time</th>
+              <th>Category</th>
+              <th>Content</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th>{{post[0]}}</th>
+              <th>{{post[1]}}</th>
+              <th>{{post[2]}}</th>
+              <th>{{post[3]}}</th>
+              <th>{{post[4]}}</th>
+              <th>{{post[5]}}</th>
+            </tr>
+          </tbody>
+        </table>
+    </div>
+  </main>
+{% endblock %}
