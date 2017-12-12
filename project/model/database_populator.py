@@ -12,6 +12,7 @@ from connect import connect
 # Fake Blog 1
 blog_1 = ('1',
           'Generic Title 1',
+          'Sub Title 1',
           'Landrover',
           '2017-01-16 15:36:38',
           'general',
@@ -29,6 +30,7 @@ blog_1 = ('1',
 # Fake Blog 1
 blog_2 = ('2',
           'Generic Title 2',
+          'Sub Title 2',
           'Landrover',
           '2017-01-28 09:10:36',
           'travel',
@@ -46,6 +48,7 @@ blog_2 = ('2',
 # Fake Blog 3
 blog_3 = ('3',
           'Generic Title 3',
+          'Sub Title 3',
           'Landrover',
           '2017-02-04 21:52:59',
           'crafting',
@@ -63,6 +66,7 @@ blog_3 = ('3',
 # Fake Blog 4
 blog_4 = ('4',
           'Generic Title 4',
+          'Sub Title 4',
           'Landrover',
           '2017-06-07 01:00:01',
           'baking',
@@ -104,10 +108,11 @@ def populate():
     for i in range(len(fake_blogs)):
         pop = Blog(bid = fake_blogs[i][0],
                    title = fake_blogs[i][1],
-                   author = fake_blogs[i][2],
-                   date_time = fake_blogs[i][3],
-                   category = fake_blogs[i][4],
-                   content = fake_blogs[i][5],
+                   sub_title = fake_blogs[i][2],
+                   author = fake_blogs[i][3],
+                   date_time = fake_blogs[i][4],
+                   category = fake_blogs[i][5],
+                   content = fake_blogs[i][6],
                    hidden = False)
         session.add(pop)
         session.commit()

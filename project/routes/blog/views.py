@@ -28,55 +28,39 @@ def dbconnect():
 @blog_blueprint.route('/blog')
 def blog():
 	dbsession = dbconnect()
-	posts = dbsession.query(Blog.title,
-							Blog.author,
-							func.to_char(Blog.date_time, 'FMMonth FMDD, YYYY'),
-							func.to_char(Blog.date_time, 'HH24:MI'),
-							Blog.category,
-							Blog.content).filter_by(hidden=False).order_by(Blog.bid.desc()).all()
-	length = len(posts)
-	return render_template('blog.html', posts=posts, length=length)
+	posts = dbsession.query(Blog).filter_by(hidden=False).order_by(Blog.bid.desc()).all()
+	return render_template('blog.html', posts=posts)
 
-@blog_blueprint.route('/blog/<int:id>')
-def blog_post(id):
+@blog_blueprint.route('/blog/<int:bid>')
+def blog_post(bid):
 	dbsession = dbconnect()
-	post = dbsession.query(Blog.title,
-							Blog.author,
-							func.to_char(Blog.date_time, 'FMMonth FMDD, YYYY'),
-							func.to_char(Blog.date_time, 'HH24:MI'),
-							Blog.category,
-							Blog.content).filter_by(id=id).one()
-	print(post)
+	post = dbsession.query(Blog).filter_by(bid=bid).one()
 	return render_template('blog_post.html', post=post)
 
 @blog_blueprint.route('/blog/admin')
 def blog_admin():
 	dbsession = dbconnect()
-	posts = dbsession.query(Blog.bid,
-							Blog.title,
-							Blog.author,
-							func.to_char(Blog.date_time, 'FMMonth FMDD, YYYY'),
-							func.to_char(Blog.date_time, 'HH24:MI'),
-							Blog.category,
-							Blog.hidden).order_by(Blog.bid.desc()).all()
-	length = len(posts)
-	return render_template('blog_admin.html', posts=posts, length=length)
+	posts = dbsession.query(Blog).order_by(Blog.bid.desc()).all()
+	return render_template('blog_admin.html', posts=posts)
 
 @blog_blueprint.route('/blog/admin/add', methods = ['GET', 'POST'])
 def blog_admin_add():
 	if request.method == 'POST':
 		# add new blog
 		dbsession = dbconnect()
-		old_id = dbsession.query(Blog.id).order_by(Blog.id.desc()).first()
+		old_id = dbsession.query(Blog.bid).order_by(Blog.bid.desc()).first()
 		new_id = old_id[0]+1
-		time = dbsession.query(Blog.date_time).first()
-		title = request.form['title']
+
+		title = request.args.get('title')
+		sub_title = request.args.get('sub_title')
 		author = 'Leandra Clifton'
 		date_time = datetime.now()
-		category = request.form['category']
-		content = request.form['content']
+		category = request.args.get('category')
+		content = request.args.get('content')
+
 		post = Blog(bid = new_id,
 					title = title,
+					sub_title = sub_title,
 					author = author,
 					date_time = date_time,
 					category = category,

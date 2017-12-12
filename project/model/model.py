@@ -22,6 +22,7 @@ class Blog(Base):
     pid = Column(Integer, primary_key=True)
     bid = Column(Integer)
     title = Column(String(80), nullable=False)
+    sub_title = Column(String(80), nullable=False)
     author = Column(String(80), nullable=False)
     date_time = Column(DateTime)
     category = Column('blog_cat',

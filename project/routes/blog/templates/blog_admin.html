@@ -28,18 +28,18 @@
             </tr>
           </thead>
           <tbody>
-          {% for i in range(length) %}
+          {% for post in posts %}
             <tr>
-              <th>{{posts[i][0]}}</th>
-              <th>{{posts[i][1]}}</th>
-              <th>{{posts[i][2]}}</th>
-              <th>{{posts[i][3]}}</th>
-              <th>{{posts[i][4]}}</th>
-              <th>{{posts[i][5]}}</th>
-              {% if posts[i][6]==False %}
-                <th><button type="button" class="btn btn-info btn-lg deleteBtn" data-toggle="modal" data-target="#myModal" id="{{posts[i][0]}}">X</button></th>
+              <th>{{post.bid}}</th>
+              <th><a href="{{ url_for('blog.blog_post', bid=post.bid) }}">{{post.title}}</a></th>
+              <th>{{post.author}}</th>
+              <th>{{post.date_time.strftime('%B %d, %Y')}}</th>
+              <th>{{post.date_time.strftime('%H:%M')}}</th>
+              <th>{{post.category}}</th>
+              {% if post.hidden==False %}
+                <th><button type="button" class="btn btn-info btn-lg deleteBtn" data-toggle="modal" data-target="#myModal" id="{{post.bid}}">X</button></th>
               {% else %}
-                <th><button type="button" class="btn btn-info btn-lg unDeleteBtn" data-toggle="modal" data-target="#myModal" id="{{posts[i][0]}}">Undo</button></th>
+                <th><button type="button" class="btn btn-info btn-lg unDeleteBtn" data-toggle="modal" data-target="#myModal" id="{{post.bid}}">Undo</button></th>
               {% endif %}
             </tr>
           {% endfor %}
@@ -69,27 +69,5 @@
 
       </div>
     </div>
-
-    <script src="{{ url_for('static', filename='js/jquery-slim.min.js') }}"></script>
-    <script>
-      $('.deleteBtn').on('click', function(e){
-        console.log(e);
-        e.preventDefault();
-        var action = $(this).attr('id');
-        console.log('action');
-        console.log(action);
-        var url = '/blog/admin/alter/delete/'+ action;
-        $('#deleteFrm').attr('action', url);
-      });
-      $('.unDeleteBtn').on('click', function(e){
-        console.log(e);
-        e.preventDefault();
-        var action = $(this).attr('id');
-        console.log('action');
-        console.log(action);
-        var url = '/blog/admin/alter/undelete/'+ action;
-        $('#deleteFrm').attr('action', url);
-      })
-    </script>
   </main>
 {% endblock %}
