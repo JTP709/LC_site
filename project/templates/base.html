@@ -77,31 +77,45 @@
 
     <!-- Initialize Quill editor -->
     <script>
-      var quill = new Quill('#addEditor', {
-        modules: {
-          toolbar: [
-            ['bold', 'italic'],
-            ['link', 'blockquote', 'code-block', 'image'],
-            [{ list: 'ordered' }, { list: 'bullet' }]
-          ]
-        },
-        placeholder: 'Compose an epic...',
-        theme: 'snow'
-      });
+      var editor = document.getElementById("addEditor");
+      if (editor){
+        var quill = new Quill('#addEditor', {
+          modules: {
+            toolbar: [
+              ['bold', 'italic'],
+              ['link', 'blockquote', 'code-block', 'image'],
+              [{ list: 'ordered' }, { list: 'bullet' }]
+            ]
+          },
+          placeholder: 'Compose an epic...',
+          theme: 'snow'
+        });
 
-      var form = document.querySelector('form');
-      form.onsubmit = function() {
-        // Populate hidden form on submit
-        var about = document.querySelector('input[name=contents]');
-        about.value = JSON.stringify(quill.getContents());
-        console.log(about.value);
-        var input = $(form).serialize();
-        window.location.replace('/blog/admin/add?'+input);
+        var form = document.querySelector('form');
+        form.onsubmit = function() {
+          // Populate hidden form on submit
+          var about = document.querySelector('input[name=contents]');
+          about.value = JSON.stringify(quill.getContents());
+          console.log(about.value);
+          var input = $(form).serializeArray();
+          var date_time = Date.now()*1000
+          $.post("/blog/admin/add",
+            {
+                title: input[0].title,
+                sub_title: input[1].sub_title,
+                date_time: date_time,
+                category: input[2].category,
+                content: input[3].content
+            },
+            function(data, status){
+                alert("Data: " + data + "\nStatus: " + status);
+            });
 
-        //console.log("Submitted", $(form).serialize(), $(form).serializeArray());
+          //console.log("Submitted", $(form).serialize(), $(form).serializeArray());
 
-        // No back end to actually submit to!
-        return false;
+          // No back end to actually submit to!
+          return false;
+        };
       };
     </script>
 
