@@ -13,28 +13,28 @@
           <hr>
         {% endif %}
       {% endwith %}
-      <h1>Create a New Blog Post</h1>
-      <p class="lead">Share your wonderfullness with the world...</p>
+      <h1>Edit Blog Post #{{post.bid}}</h1>
+      <p class="lead">Spruce it up just a bit...</p>
       <form>
         <label><strong>Title:</strong></label>
         <br>
-        <input type="text" name="title">
+        <input type="text" name="title" value="{{post.title}}">
         <br>
         <br>
-        <label><strong>Subtitle:</strong></label>
+        <label><strong>Subitle:</strong></label>
         <br>
-        <input type="text" name="sub_title">
+        <input type="text" name="sub_title" value="{{post.sub_title}}">
         <br>
         <br>
         <label><strong>Category:</strong></label>
         <br>
-        <input type ='radio'  name='category' value ='general'> General
+        <input type ='radio'  name='category' value ='general' {% if post.category == 'general' %}checked='checked'{% endif %}> General
         <br>
-        <input type ='radio'  name='category' value ='crafting'> Crafting
+        <input type ='radio'  name='category' value ='crafting' {% if post.category == 'crafting' %}checked='checked'{% endif %}> Crafting
         <br>
-        <input type ='radio'  name='category' value ='baking'> Baking/Cooking
+        <input type ='radio'  name='category' value ='baking' {% if post.category == 'baking' %}checked='checked'{% endif %}> Baking/Cooking
         <br>
-        <input type ='radio'  name='category' value ='travel'> Travel
+        <input type ='radio'  name='category' value ='travel' {% if post.category == 'travel' %}checked='checked'{% endif %}> Travel
         <br>
         <br>
         <label><strong>Content:</strong></label>
@@ -55,6 +55,8 @@
     </div>
   </main>
   <script>
-    var postType = 'add';
+    $('#addEditor').append({{post.content | safe}});
+    var postType = 'edit';
+    var post_id = {{post.bid}};
   </script>
 {% endblock %}

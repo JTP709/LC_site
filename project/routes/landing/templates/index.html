@@ -85,8 +85,10 @@
 
       <div class="row featurette">
         <div class="col-md-7">
-          <h2 class="featurette-heading">First featurette heading. <span class="text-muted">It'll blow your mind.</span></h2>
-          <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
+          <a href="{{ url_for('blog.blog_post', bid=general_post.bid) }}">
+            <h2 class="featurette-heading">{{general_post.title}} <span class="text-muted">{{general_post.sub_title}}.</span></h2>
+          </a>
+          <p class="lead">{{general_post_preview}}</p>
         </div>
         <div class="col-md-5">
           <img class="featurette-image img-fluid mx-auto" data-src="holder.js/500x500/auto" alt="Generic placeholder image">
@@ -97,8 +99,10 @@
 
       <div class="row featurette">
         <div class="col-md-7 order-md-2">
-          <h2 class="featurette-heading">Oh yeah, it's that good. <span class="text-muted">See for yourself.</span></h2>
-          <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
+          <a href="{{ url_for('blog.blog_post', bid=crafting_post.bid) }}">
+            <h2 class="featurette-heading">{{crafting_post.title}} <span class="text-muted">{{crafting_post.sub_title}}</span></h2>
+          </a>
+          <p class="lead">{{crafting_post_preview}}</p>
         </div>
         <div class="col-md-5 order-md-1">
           <img class="featurette-image img-fluid mx-auto" data-src="holder.js/500x500/auto" alt="Generic placeholder image">
@@ -109,10 +113,26 @@
 
       <div class="row featurette">
         <div class="col-md-7">
-          <h2 class="featurette-heading">And lastly, this one. <span class="text-muted">Checkmate.</span></h2>
-          <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
+          <a href="{{ url_for('blog.blog_post', bid=baking_post.bid) }}">
+            <h2 class="featurette-heading">{{baking_post.title}} <span class="text-muted">{{baking_post.sub_title}}</span></h2>
+          </a>
+          <p class="lead">{{baking_post_preview}}</p>
         </div>
         <div class="col-md-5">
+          <img class="featurette-image img-fluid mx-auto" data-src="holder.js/500x500/auto" alt="Generic placeholder image">
+        </div>
+      </div>
+
+      <hr class="featurette-divider">
+
+      <div class="row featurette">
+        <div class="col-md-7 order-md-2">
+          <a href="{{ url_for('blog.blog_post', bid=crafting_post.bid) }}">
+            <h2 class="featurette-heading">{{travel_post.title}} <span class="text-muted">{{travel_post.sub_title}}</span></h2>
+          </a>
+          <p class="lead">{{travel_post_preview}}</p>
+        </div>
+        <div class="col-md-5 order-md-1">
           <img class="featurette-image img-fluid mx-auto" data-src="holder.js/500x500/auto" alt="Generic placeholder image">
         </div>
       </div>

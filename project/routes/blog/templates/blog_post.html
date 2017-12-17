@@ -21,10 +21,15 @@
     <article>
       <div class="container">
         <div class="row">
-          <div class="col-lg-8 col-md-10 mx-auto">
-            {{ post.content|safe }}
+          <div id="blog_post_content" class="col-lg-8 col-md-10 mx-auto">
           </div>
         </div>
       </div>
     </article>
+    <script>
+      var blog_post_content = document.getElementById("blog_post_content");
+      if(blog_post_content){
+        $('#blog_post_content').html({{ post.content|safe }});
+      }
+    </script>
 {% endblock %}

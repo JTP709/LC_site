@@ -13,7 +13,16 @@
           <hr>
         {% endif %}
       {% endwith %}
-      <h1>Blog Admin</h1>
+
+      <div class="row">
+        <div class="col-md">
+          <h1>Blog Admin</h1>
+        </div>
+        <div class="col-md">
+          <a href="/blog/admin/add"><button class="btn btn-primary">New Post</button></a>
+        </div>
+      </div>
+
       <p class="lead">Leandra's Blog Admin Page</p>
       <table id = "incidents" class="table table-striped">
           <thead>
@@ -24,6 +33,7 @@
               <th>Date</th>
               <th>Time</th>
               <th>Category</th>
+              <th>Edit</th>
               <th>Delete</th>
             </tr>
           </thead>
@@ -36,10 +46,15 @@
               <th>{{post.date_time.strftime('%B %d, %Y')}}</th>
               <th>{{post.date_time.strftime('%H:%M')}}</th>
               <th>{{post.category}}</th>
+              <th>
+                <a href="{{ url_for('blog.blog_admin_edit', id=post.bid) }}">
+                  <button type="button" class="btn btn-info btn-lg editBtn">Edit</button></th>
+                </a>
+              </th>
               {% if post.hidden==False %}
-                <th><button type="button" class="btn btn-info btn-lg deleteBtn" data-toggle="modal" data-target="#myModal" id="{{post.bid}}">X</button></th>
+                <th><button type="button" class="btn btn-info btn-lg deleteBtn" data-toggle="modal" data-target="#myModal" id="{{post.bid}}">Del</button></th>
               {% else %}
-                <th><button type="button" class="btn btn-info btn-lg unDeleteBtn" data-toggle="modal" data-target="#myModal" id="{{post.bid}}">Undo</button></th>
+                <th><button type="button" class="btn btn-info btn-lg unDeleteBtn" data-toggle="modal" data-target="#myModal" id="{{post.bid}}">UnD</button></th>
               {% endif %}
             </tr>
           {% endfor %}

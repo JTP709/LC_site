@@ -33,6 +33,7 @@ class Blog(Base):
                             name = 'blog_cat'))
     content = Column(String)
     hidden = Column(Boolean)
+    updated = Column(Boolean)
 
 con = connect()
 Base.metadata.create_all(con)

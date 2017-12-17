@@ -10,6 +10,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import func, desc
 from sqlalchemy.orm import sessionmaker
 from datetime import datetime
+import json
 
 ### Config ###
 blog_blueprint = Blueprint('blog', __name__, template_folder='templates')
@@ -25,62 +26,106 @@ def dbconnect():
 	return dbsession
 
 ### routes ###
-@blog_blueprint.route('/blog')
-def blog():
+@blog_blueprint.route('/blog/<cat>')
+def blog(cat):
 	dbsession = dbconnect()
-	posts = dbsession.query(Blog).filter_by(hidden=False).order_by(Blog.bid.desc()).all()
-	return render_template('blog.html', posts=posts)
+	if cat in {'all','general','crafting','baking','travel'}:
+		if cat == 'all':
+			posts = dbsession.query(Blog).filter_by(hidden=False, updated=True).order_by(Blog.bid.desc()).all()
+		else:
+			posts = dbsession.query(Blog).filter_by(hidden=False, updated=True, category=cat).order_by(Blog.bid.desc()).all()
+		return render_template('blog.html', posts=posts)
+	else:
+		return render_template('404.html')
 
 @blog_blueprint.route('/blog/<int:bid>')
 def blog_post(bid):
 	dbsession = dbconnect()
-	post = dbsession.query(Blog).filter_by(bid=bid).one()
+	post = dbsession.query(Blog).filter_by(bid=bid).order_by(Blog.pid.desc()).first()
 	return render_template('blog_post.html', post=post)
+
+@blog_blueprint.route('/blog/newest')
+def blog_new():
+	dbsession = dbconnect()
+	post = dbsession.query(Blog).order_by(Blog.pid.desc()).first()
+	return	render_template('blog_post.html', post=post)
 
 @blog_blueprint.route('/blog/admin')
 def blog_admin():
 	dbsession = dbconnect()
-	posts = dbsession.query(Blog).order_by(Blog.bid.desc()).all()
+	posts = dbsession.query(Blog).filter_by(updated=True).order_by(Blog.bid.desc()).all()
 	return render_template('blog_admin.html', posts=posts)
 
-@blog_blueprint.route('/blog/admin/add', methods = ['GET', 'POST'])
+@blog_blueprint.route('/blog/admin/add')
 def blog_admin_add():
-	if request.method == 'POST':
-		# add new blog
-		dbsession = dbconnect()
+	return render_template('blog_admin_add.html')
+
+@blog_blueprint.route('/blog/admin/edit/<int:id>')
+def blog_admin_edit(id):
+	dbsession = dbconnect()
+	post = dbsession.query(Blog).filter_by(bid=id).order_by(Blog.pid.desc()).first()
+	return render_template('blog_admin_edit.html', post=post)
+
+@blog_blueprint.route('/blog/admin/alter/<action>/<int:id>', methods = ['POST'])
+def blog_admin_alter(action,id):
+	dbsession = dbconnect()
+	if action == 'delete':
+		post = dbsession.query(Blog).filter_by(bid = id).order_by(Blog.pid.desc()).first()
+		post.hidden = True
+		dbsession.commit()
+		flash("Blog post #%s had been deleted." % id)
+		return redirect(url_for('blog.blog_admin'))
+	if action == 'undelete':
+		post = dbsession.query(Blog).filter_by(bid = id).order_by(Blog.pid.desc()).first()
+		post.hidden = False
+		dbsession.commit()
+		flash("Blog post #%s had been restored." % id)
+		return redirect(url_for('blog.blog_admin'))
+	if action == 'add':
 		old_id = dbsession.query(Blog.bid).order_by(Blog.bid.desc()).first()
 		new_id = old_id[0]+1
-
-		title = request.args.get('title')
-		sub_title = request.args.get('sub_title')
+		title = request.form['title']
+		sub_title = request.form['sub_title']
 		author = 'Leandra Clifton'
 		date_time = datetime.now()
-		category = request.args.get('category')
-		content = request.args.get('content')
-
+		category = request.form['category']
+		content = request.form['content']
+		
 		post = Blog(bid = new_id,
 					title = title,
 					sub_title = sub_title,
 					author = author,
 					date_time = date_time,
 					category = category,
-					content = content)
+					content = content,
+					hidden = False,
+					updated = True)
 		dbsession.add(post)
 		dbsession.commit()
-		return redirect(url_for('blog.blog'))
-	else:
-		return render_template('blog_admin_add.html')
+		flash("Blog post has been added.")
+		return json.dumps({'success':True}), 200, {'ContentType':'application/json'} 
+	if action == 'edit':
+		o_post = dbsession.query(Blog).filter_by(bid = id).order_by(Blog.pid.desc()).first()
+		o_post.updated = False
+		dbsession.commit()
 
-@blog_blueprint.route('/blog/admin/alter/<action>/<int:id>', methods = ['POST'])
-def blog_admin_del(action,id):
-	dbsession = dbconnect()
-	post = dbsession.query(Blog).filter_by(bid = id).first()
-	if action == 'delete':
-		post.hidden = True
+		title = request.form['title']
+		sub_title = request.form['sub_title']
+		author = 'Leandra Clifton'
+		date_time = datetime.now()
+		category = request.form['category']
+		content = request.form['content']
+		
+		post = Blog(bid = id,
+					title = title,
+					sub_title = sub_title,
+					author = author,
+					date_time = date_time,
+					category = category,
+					content = content,
+					hidden = False,
+					updated = True)
+		dbsession.add(post)
 		dbsession.commit()
-		flash("Blog post #%s had been deleted." % id)
-	if action == 'undelete':
-		post.hidden = False
-		dbsession.commit()
-		flash("Blog post #%s had been restored." % id)
-	return redirect(url_for('blog.blog_admin'))
+		flash("Blog post #%s has been edited." % id)
+		return json.dumps({'success':True}), 200, {'ContentType':'application/json'} 
